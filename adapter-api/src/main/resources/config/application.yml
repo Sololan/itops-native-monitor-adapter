@@ -1,0 +1,93 @@
+# ——————————————————————————————变动配置——————————————————————————————————
+server:
+  port: 8011
+  servlet:
+    context-path: /
+  tomcat:
+    max-http-post-size: -1
+
+# eureka server
+eureka-defaultZone: http://192.170.1.204:8761/eureka
+
+# spring boot admin
+spring-boot-admin-url: http://192.170.1.204:7001
+
+logback:
+  # 设置root logger level, 默认ERROR，可设置为DEBUG, INFO, ERROR等
+  rootLevel: INFO
+  # 设置日志文件名称，默认server
+  appName: server
+  # 日志打印路径, 默认为当前路径下的logs目录
+  logDir: logs
+
+server-monitor: zabbix
+
+zabbix:
+  login-url: http://192.170.1.35:8080/api_jsonrpc.php
+  user: Admin
+  password: zabbix
+
+
+spring:
+  # redis
+  redis:
+    host: 192.170.1.204
+    port: 6379
+    password:
+
+
+# ——————————————————————————————变动配置——————————————————————————————————
+
+  application:
+    name: monitor-adapter
+  mvc:
+    throw-exception-if-no-handler-found: true
+  boot:
+    admin:
+      client:
+        url: ${spring-boot-admin-url}
+        instance:
+          prefer-ip: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  servlet:
+    multipart:
+      # 单文件最大
+      max-file-size: 500MB
+      # 一次上传最大
+      max-request-size: 500MB
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}
+  client:
+    service-url:
+      defaultZone: ${eureka-defaultZone}
+
+
+logging:
+  level:
+    root: info
+    org.springframework: warn
+
+swagger:
+  title: "web rest API"
+  description: "web API"
+  version: "v1.0.0"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    redis:
+      enabled: false
+
+
